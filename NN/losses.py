@@ -1,8 +1,8 @@
 import numpy as np
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from math import log2
 
-class Loss:
+class Loss(ABC):
     """
     This protocol must be implemented by Loss classes
     """
@@ -10,23 +10,17 @@ class Loss:
     def __call__(self, predictions: np.ndarray, labels: np.ndarray) -> np.ndarray:
         raise NotImplementedError()
 
-# class BinaryCrossEntropy(Loss):
-#     def __call__(self, predictions: np.ndarray, labels: np.ndarray) -> np.ndarray:
-#         return -sum([labels[i]*log2(predictions[i]) for i in range(len(labels))])
-#         # loss = np.mean(np.multiply(labels, np.log(predictions)) + np.multiply(1 - labels, np.log(1 - predictions)))
-#         # return -1 * loss
-    
-#     def gradient(self, predictions: np.ndarray, labels: np.ndarray) -> np.ndarray:
-#         return -1 * (np.divide(labels, predictions) - np.divide(1 - labels, 1 - predictions))
+
 class BinaryCrossEntropy(Loss):
     def __call__(self, predictions: np.ndarray, labels: np.ndarray) -> np.ndarray:
-        print(predictions)
-        print(labels)
+        predictions += np.finfo(np.float32).eps
         loss = np.mean(np.multiply(labels, np.log(predictions)) + np.multiply(1 - labels, np.log(1 - predictions)))
         return -1 * loss
 
     def gradient(self, predictions: np.ndarray, labels: np.ndarray) -> np.ndarray:
+        predictions += np.finfo(np.float32).eps
         return -1 * (np.divide(labels, predictions) - np.divide(1 - labels, 1 - predictions))
+
 
 if __name__ == "__main__":
     y = BinaryCrossEntropy()

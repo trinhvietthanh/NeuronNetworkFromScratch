@@ -1,5 +1,6 @@
 from NN.activation import Activations
 # import Activations
+# from activation import Activations
 import numpy as np
 
 class Linear(Activations.Activation):
@@ -40,10 +41,16 @@ class Tanh(Activations.Activation):
 
 class Softmax(Activations.Activation):
     def __call__(self, x: np.ndarray):
-        e_x = np.exp(x - np.max(x))
-        return e_x / e_x.sum()
+        e_x = np.exp(x - np.max(x) + np.finfo(np.float32).eps)
+        # print(e_x)
+        return np.divide(e_x, e_x.sum(axis=0, keepdims=True))
 
     def gradient(self, output):
         # Reshape the 1-d softmax to 2-d so that np.dot will do the matrix multiplication
-        s = output.reshape(-1,1)
-        return np.diagflat(s) - np.dot(s, s.T)
+        # s = output.reshape(-1,1)
+        # return np.diagflat(s) - np.dot(s, s.T)
+        J = - output[..., None] * output[:, None, :] # off-diagonal Jacobian
+        iy, ix = np.diag_indices_from(J[0])
+        J[:, iy, ix] = output * (1. - output) # diagonal
+        return J.sum(axis=1) # sum across-rows for each sample
+
