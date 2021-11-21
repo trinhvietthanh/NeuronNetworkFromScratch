@@ -1,6 +1,6 @@
 #HomeCredit with MLP
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1xwgxwhhi_ADXJyuQeJsL3-aGq7NICCBQ?usp=sharing)]
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1xwgxwhhi_ADXJyuQeJsL3-aGq7NICCBQ?usp=sharing)
 
 ##Using framework Keras
 - run file HomeCredit.ipynb
