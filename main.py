@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 
 train = np.load('save/train.npy')
-print(train.shape)
 test = np.load('save/test.npy')
 train_poly_fea = np.load('save/train_poly_fea.npy')
 test_poly_fea = np.load('save/test_poly_fea.npy')
@@ -20,8 +19,7 @@ model.add(layers.Linear(128, activation="relu"))
 model.add(layers.Linear(64, activation="relu"))
 model.add(layers.Linear(1, activation="sigmoid"))
 
-model.compile(lr=0.1, loss=BinaryCrossEntropy(), regularization_factor=10.)
-
+model.compile(lr=0.1, loss=BinaryCrossEntropy())
 count = 0
 kfold = KFold(n_splits = 10, shuffle = True, random_state = 12)
 valid_scores = []
@@ -37,7 +35,7 @@ for train_idx, valid_idx in kfold.split(train_poly_fea):
         model.fit(
             data,
             train_labels,
-            epochs=2,
+            epochs=100,
             callbacks=(
                 CSVLogger(file_path="logs/logs1.csv", overwrite=True),
             ), verbose=True
@@ -47,7 +45,8 @@ for train_idx, valid_idx in kfold.split(train_poly_fea):
 #         CSVLogger(file_path="logs/logs.csv", overwrite=True),
 #     ), verbose=True)
 train_prob_nn = model.predict(train.T)
-print(TARGET.shape)
+# print(train_prob_nn[0])
+# print(TARGET[0])
 from sklearn.metrics import roc_curve
 
 
@@ -79,5 +78,5 @@ print(auc(fpr4, tpr4))
 
 # prec, rec, thres = precision_recall_curve(TARGET, train_prob_nn.T)
 # _plot_prec_rec_curve(prec, rec, thres)
-from sklearn.metrics import classification_report
-print(classification_report(TARGET, train_prob_nn.T))
+# from sklearn.metrics import classification_report
+# print(classification_report(TARGET, train_prob_nn.T))

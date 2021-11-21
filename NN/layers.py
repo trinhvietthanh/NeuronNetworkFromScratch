@@ -14,6 +14,7 @@ class Linear:
     def __init__(self, units, activation=None, use_bias=True):
         self.units = int(units)
         # self.activations = fn.get(activation)
+        self.a = activation
         activation = activation.lower()
         if activation in activation_fn:
             # print(activation_fn)
@@ -48,6 +49,7 @@ class Linear:
         if self.activations is not None:
             outputs = self.activations(outputs)
         self._output = outputs
+        # print(self.a, outputs[0])
         return outputs
     
     def update(self, lr: float):
@@ -88,5 +90,5 @@ if __name__ == "__main__":
     print(y.shape)
     y = model(y)
     print(y.shape)
-    model = Linear(units=2, activation='softmax') 
+    model = Linear(units=2, activation='sigmoid') 
     print(model(y))

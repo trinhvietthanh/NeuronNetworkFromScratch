@@ -73,7 +73,7 @@ class Sequential:
         
     def predict(self, x):
         outputs = self(x)
-        return (outputs > 0.5).astype("uint8")
+        return outputs
     
     def evaluate(self, x, y):
         _ = self(x)
